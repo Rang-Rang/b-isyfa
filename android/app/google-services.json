@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "163998572071",
+    "project_id": "smart-medic-89eb7",
+    "storage_bucket": "smart-medic-89eb7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163998572071:android:7a32b3b4e31dcafbe47802",
+        "android_client_info": {
+          "package_name": "com.example.smart_medic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163998572071-lst3782hm7abfg4ulbfqkvdstu9fq8rg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOv8rrI-Weei7xS_tm8KIA8LSryzdDD04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163998572071-lst3782hm7abfg4ulbfqkvdstu9fq8rg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
