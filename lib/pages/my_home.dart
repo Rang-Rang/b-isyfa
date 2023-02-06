@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_medic/main.dart';
+import 'package:smart_medic/pages/login/login.dart';
 
 class MyHome extends StatefulWidget {
   static const routeName = '/home';
@@ -47,6 +48,7 @@ class _MyHomeState extends State<MyHome> {
                   leading: GestureDetector(
                     onTap: (() {
                       signUserOut();
+                       Navigator.of(context).pushNamed(LoginPage.routeName);
                     }),
                     child: CircleAvatar(
                       child: Icon(Icons.person),
