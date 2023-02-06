@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_medic/pages/my_home.dart';
 
 class Logins extends StatefulWidget {
   static const routeName = '/logins';
@@ -19,6 +20,8 @@ class _LoginsState extends State<Logins> {
         email: emailController.text,
         password: passwordController.text,
       );
+
+      Navigator.of(context).pushReplacementNamed(MyHome.routeName);
 
   }
 
