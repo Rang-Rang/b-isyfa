@@ -15,6 +15,8 @@ class _MyHomeState extends State<MyHome> {
     FirebaseAuth.instance.signOut();
   }
 
+  final user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +57,7 @@ class _MyHomeState extends State<MyHome> {
                     ),
                   ),
                   title: Text(
-                    "Muhammad Al-Ghifari",
+                    "${user?.email}",
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
