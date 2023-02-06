@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smart_medic/main.dart';
 import 'package:smart_medic/pages/login/login.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyHome extends StatefulWidget {
   static const routeName = '/home';
@@ -12,15 +15,106 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  void signUserOut() async{
+  void signUserOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
 
   final user = FirebaseAuth.instance.currentUser;
 
+  Future getNews() async {
+    final url =
+        Uri.parse('http://192.168.100.150/dashboard/biysifadb/getdata.php');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
+
   @override
   Widget build(BuildContext context) {
+    var futureBuilder = FutureBuilder(
+      future: getNews(),
+      builder: ((context, snapshot) {
+        if (snapshot.hasError) print(snapshot.error);
+        return snapshot.hasData
+            ? ListView.builder(
+              padding: const EdgeInsets.only(top: 30),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  List list = snapshot.data;
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.zero,
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30, top: 10, bottom: 40),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(left: 10, top: 16),
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    child: Row(
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              list[index]['kategori'],
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Text(
+                                              list[index]['title'],
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Container(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              list[index]['content'],
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white60,
+                                              ),
+                                              maxLines: 2,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  height: 120,
+                                  width: 330,
+                                  decoration: BoxDecoration(
+                                    color: Colors.deepPurple,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        
+                      ],
+                    ),
+                  );
+                  
+                })
+            : Center(
+                child: CircularProgressIndicator(),
+              );
+      }),
+    );
     return Scaffold(
       resizeToAvoidBottomInset: false,
 
@@ -32,6 +126,7 @@ class _MyHomeState extends State<MyHome> {
       //     ],
       //   ),
       // ),
+      // body: futureBuilder,
       body: Column(
         children: [
           Stack(
@@ -52,7 +147,7 @@ class _MyHomeState extends State<MyHome> {
                   leading: GestureDetector(
                     onTap: (() async {
                       signUserOut();
-                       Navigator.of(context).pushNamed(LoginPage.routeName);
+                      Navigator.of(context).pushNamed(LoginPage.routeName);
                       //  Navigator.of(context).pop();
                     }),
                     child: CircleAvatar(
@@ -138,7 +233,7 @@ class _MyHomeState extends State<MyHome> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 50, right: 50),
+            padding: const EdgeInsets.only(left: 50, right: 50),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -166,9 +261,6 @@ class _MyHomeState extends State<MyHome> {
                           ],
                         ),
                       ),
-                    ),
-                    Container(
-                      height: 20,
                     ),
                     TextButton(
                       onPressed: () {},
@@ -220,9 +312,6 @@ class _MyHomeState extends State<MyHome> {
                         ),
                       ),
                     ),
-                    Container(
-                      height: 20,
-                    ),
                     TextButton(
                       onPressed: () {},
                       child: Container(
@@ -273,9 +362,6 @@ class _MyHomeState extends State<MyHome> {
                         ),
                       ),
                     ),
-                    Container(
-                      height: 20,
-                    ),
                     TextButton(
                       onPressed: () {},
                       child: Container(
@@ -305,7 +391,9 @@ class _MyHomeState extends State<MyHome> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 30, top: 20),
+            padding: const EdgeInsets.only(
+              left: 30,
+            ),
             child: Row(
               children: [
                 Text(
@@ -316,143 +404,8 @@ class _MyHomeState extends State<MyHome> {
             ),
           ),
 
-          // card
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 30, top: 7),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 10, top: 16),
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Ikuti Program",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Vaksin gratis",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      "di Isyfa",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Konsultasi lebih dalam dengan\ndokter konsulen terbaik",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white60,
-                                      ),
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          height: 120,
-                          width: 290,
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30, top: 7),
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.only(left: 10, top: 16),
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Ikuti Program",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Vaksin gratis",
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      "di Isyfa",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Konsultasi lebih dalam dengan\ndokter konsulen terbaik",
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.white60,
-                                      ),
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          height: 120,
-                          width: 290,
-                          decoration: BoxDecoration(
-                            color: Colors.deepPurple,
-                            borderRadius: BorderRadius.all(Radius.circular(15)),
-                          ),
-                        ),
-                        Container(
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          Expanded(child: futureBuilder),
+         
           Container(
             padding: EdgeInsets.only(left: 30, right: 20),
             child: Row(
