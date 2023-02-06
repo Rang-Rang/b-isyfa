@@ -44,7 +44,6 @@ dependencies:
   dropdown_search: ^5.0.5
   firebase_core: ^2.4.1
   firebase_auth: ^4.2.5
-  url_launcher: ^6.1.8
 
 dev_dependencies:
   flutter_test:
