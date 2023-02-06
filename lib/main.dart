@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
         MyHome.routeName: (context) => MyHome(),
         Pasien.routeName: (context) => Pasien(),
         AuthPage.routeName:(context) => AuthPage(),
-        // Logins.routeName:(context) => Logins(),
+        Logins.routeName:(context) => Logins(),
       },
     );
   }
