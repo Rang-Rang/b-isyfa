@@ -230,7 +230,7 @@ class _PasienState extends State<Pasien> {
                          Navigator.of(context).pushNamed(Logins.routeName);
                       },
                       child: Text(
-                        "Pasien Lama",
+                        "Pasien lama",
                         style: TextStyle(color: Colors.white),
                       ),
                       style: TextButton.styleFrom(
@@ -252,7 +252,7 @@ class _PasienState extends State<Pasien> {
                         style: TextStyle(color: Colors.white),
                       ),
                       style: TextButton.styleFrom(
-                        padding: EdgeInsets.only(left: 115, right: 115),
+                        padding: EdgeInsets.only(left: 110, right: 110),
                         backgroundColor: Colors.deepPurple,
                         shape: StadiumBorder(),
                       ),
