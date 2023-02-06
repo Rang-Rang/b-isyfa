@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:smart_medic/main.dart';
 import 'package:smart_medic/pages/login/login.dart';
 
@@ -11,8 +12,9 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
-  void signUserOut(){
-    FirebaseAuth.instance.signOut();
+  void signUserOut() async{
+    await FirebaseAuth.instance.signOut();
+    await GoogleSignIn().signOut();
   }
 
   final user = FirebaseAuth.instance.currentUser;
@@ -48,9 +50,10 @@ class _MyHomeState extends State<MyHome> {
                 padding: EdgeInsets.only(top: 70),
                 child: ListTile(
                   leading: GestureDetector(
-                    onTap: (() {
+                    onTap: (() async {
                       signUserOut();
                        Navigator.of(context).pushNamed(LoginPage.routeName);
+                      //  Navigator.of(context).pop();
                     }),
                     child: CircleAvatar(
                       child: Icon(Icons.person),
