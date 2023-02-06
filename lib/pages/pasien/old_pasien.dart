@@ -21,7 +21,7 @@ class _LoginsState extends State<Logins> {
         password: passwordController.text,
       );
 
-      Navigator.of(context).pushReplacementNamed(MyHome.routeName);
+      Navigator.of(context).pushNamed(MyHome.routeName);
 
   }
 
