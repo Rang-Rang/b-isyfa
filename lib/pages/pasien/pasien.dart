@@ -5,6 +5,8 @@ import 'package:smart_medic/pages/login/login.dart';
 import 'package:smart_medic/pages/my_home.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:intl/intl.dart';
+import 'package:smart_medic/pages/pasien/old_pasien.dart';
+import 'package:smart_medic/services/auth_service.dart';
 
 class Pasien extends StatefulWidget {
   static const routeName = '/login';
@@ -205,7 +207,7 @@ class _PasienState extends State<Pasien> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(top: 195),
+                    padding: EdgeInsets.only(top: 100),
                     child: OutlinedButton(
                       onPressed: () {
                         signUserIn();
@@ -215,7 +217,42 @@ class _PasienState extends State<Pasien> {
                         style: TextStyle(color: Colors.white),
                       ),
                       style: TextButton.styleFrom(
+                        padding: EdgeInsets.only(left: 162, right: 162),
+                        backgroundColor: Colors.deepPurple,
+                        shape: StadiumBorder(),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    // padding: EdgeInsets.only(),
+                    child: OutlinedButton(
+                      onPressed: () {
+                         Navigator.of(context).pushNamed(Logins.routeName);
+                      },
+                      child: Text(
+                        "Pasien Lama",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: TextButton.styleFrom(
                         padding: EdgeInsets.only(left: 140, right: 140),
+                        backgroundColor: Colors.deepPurple,
+                        shape: StadiumBorder(),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    // padding: EdgeInsets.only(),
+                    child: OutlinedButton(
+                      onPressed: () {
+                        //  Navigator.of(context).pushNamed(Logins.routeName);
+                        AuthService().signInWithGoogle();
+                      },
+                      child: Text(
+                        "Login Dengan Google",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.only(left: 115, right: 115),
                         backgroundColor: Colors.deepPurple,
                         shape: StadiumBorder(),
                       ),

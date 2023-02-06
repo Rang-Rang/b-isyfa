@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_medic/pages/login/login.dart';
 import 'package:smart_medic/pages/my_home.dart';
 
 class Logins extends StatefulWidget {
@@ -53,7 +54,7 @@ class _LoginsState extends State<Logins> {
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(right: 177),
+                    padding: EdgeInsets.only(right: 277),
                     child: Text("Email"),
                   ),
                   TextField(
@@ -97,6 +98,23 @@ class _LoginsState extends State<Logins> {
                 },
                 child: Text(
                   "Kirim",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.only(left: 160, right: 160),
+                  backgroundColor: Colors.deepPurple,
+                  shape: StadiumBorder(),
+                ),
+              ),
+            ),
+            Container(
+              // padding: EdgeInsets.only(top),
+              child: OutlinedButton(
+                onPressed: () {
+                   Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+                },
+                child: Text(
+                  "Pasien Baru",
                   style: TextStyle(color: Colors.white),
                 ),
                 style: TextButton.styleFrom(
