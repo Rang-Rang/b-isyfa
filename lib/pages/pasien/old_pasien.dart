@@ -14,37 +14,14 @@ class _LoginsState extends State<Logins> {
   final passwordController = TextEditingController();
 
   void signUserIn() async {
-    showDialog(
-      context: context,
-      builder: ((context) {
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }),
-    );
-    try {
+
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
 
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context);
-      showErrorMessage(e.code);
-    }
   }
 
-  void showErrorMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Incorrect Email"),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
