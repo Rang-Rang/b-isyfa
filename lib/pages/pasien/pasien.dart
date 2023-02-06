@@ -26,6 +26,8 @@ class _PasienState extends State<Pasien> {
       email: emailController.text,
       password: passwordController.text,
     );
+
+    Navigator.of(context).pushNamed(MyHome.routeName);
   }
 
   @override
@@ -243,9 +245,10 @@ class _PasienState extends State<Pasien> {
                   Container(
                     // padding: EdgeInsets.only(),
                     child: OutlinedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         //  Navigator.of(context).pushNamed(Logins.routeName);
-                        AuthService().signInWithGoogle();
+                        await AuthService().signInWithGoogle();
+                        Navigator.of(context).pushNamed(MyHome.routeName);
                       },
                       child: Text(
                         "Login Dengan Google",
@@ -655,7 +658,7 @@ class _PasienState extends State<Pasien> {
                             padding: EdgeInsets.only(left: 0),
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.of(context).pushReplacementNamed(MyHome.routeName);
+                                // Navigator.of(context).pushReplacementNamed(MyHome.routeName);
                               },
                               child: Text(
                                 "Kirim",
