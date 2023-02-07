@@ -23,8 +23,7 @@ class _MyHomeState extends State<MyHome> {
   final user = FirebaseAuth.instance.currentUser;
 
   Future getNews() async {
-    final url =
-        Uri.parse('http://192.168.100.150/dashboard/biysifadb/getdata.php');
+    final url = Uri.parse('http://192.168.1.10/dashboard/biysifadb/getdata.php');
     var response = await http.get(url);
     return json.decode(response.body);
   }
