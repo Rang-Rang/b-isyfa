@@ -1,6 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:smart_medic/iconbtn/ambulan.dart';
+import 'package:smart_medic/iconbtn/bantuan.dart';
+import 'package:smart_medic/iconbtn/daftar.dart';
+import 'package:smart_medic/iconbtn/hasil_lab.dart';
+import 'package:smart_medic/iconbtn/kamar.dart';
+import 'package:smart_medic/iconbtn/sholat.dart';
 import 'package:smart_medic/main.dart';
 import 'package:smart_medic/pages/login/login.dart';
 import 'dart:async';
@@ -23,20 +29,28 @@ class _MyHomeState extends State<MyHome> {
   final user = FirebaseAuth.instance.currentUser;
 
   Future getNews() async {
-    final url = Uri.parse('http://192.168.1.10/dashboard/biysifadb/getdata.php');
+    final url =
+        Uri.parse('http://192.168.1.12/rest_bisyifa/api/news');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
+
+  Future getKamar() async {
+    final url =
+        Uri.parse('http://192.168.1.12/rest_bisyifa/api/kamar/');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
   @override
   Widget build(BuildContext context) {
-    var futureBuilder = FutureBuilder(
+    var futureBuilderNews = FutureBuilder(
       future: getNews(),
       builder: ((context, snapshot) {
         if (snapshot.hasError) print(snapshot.error);
         return snapshot.hasData
             ? ListView.builder(
-              padding: const EdgeInsets.only(top: 30),
+                padding: const EdgeInsets.only(top: 30),
                 itemCount: snapshot.data.length,
                 itemBuilder: (context, index) {
                   List list = snapshot.data;
@@ -46,7 +60,8 @@ class _MyHomeState extends State<MyHome> {
                     child: Row(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 30, top: 10, bottom: 40),
+                          padding: const EdgeInsets.only(
+                              left: 30, top: 10, bottom: 40),
                           child: Container(
                             child: Row(
                               children: [
@@ -61,11 +76,13 @@ class _MyHomeState extends State<MyHome> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              list[index]['kategori'],
+                                              list[index]['id_kategori'],
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.white,
                                               ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis
                                             ),
                                             Text(
                                               list[index]['title'],
@@ -74,6 +91,8 @@ class _MyHomeState extends State<MyHome> {
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold,
                                               ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis
                                             ),
                                             Container(
                                               height: 5,
@@ -84,7 +103,8 @@ class _MyHomeState extends State<MyHome> {
                                                 fontSize: 12,
                                                 color: Colors.white60,
                                               ),
-                                              maxLines: 2,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis
                                             ),
                                           ],
                                         ),
@@ -103,17 +123,106 @@ class _MyHomeState extends State<MyHome> {
                             ),
                           ),
                         ),
-                        
                       ],
                     ),
                   );
-                  
                 })
             : Center(
                 child: CircularProgressIndicator(),
               );
       }),
     );
+    var FutureBuilder2 = FutureBuilder(
+      future: getKamar(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) print(snapshot.error);
+        List list = snapshot.data;
+        return snapshot.hasData
+            ? ListView.builder(
+              padding: EdgeInsets.zero,
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  List list = snapshot.data;
+                  return Container(
+                    padding: EdgeInsets.zero,
+                    child: Container(
+                      // padding: EdgeInsets.only(bottom: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)),
+                            ),
+                            child: Row(
+                              children: [
+                                Column(
+                                  children: [
+                                    Text(
+                                      list[index]['total_kamar'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Text("Total kamar"),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 16, right: 16),
+                                  child: Text(
+                                    "|",
+                                    style: TextStyle(color: Colors.black38),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      list[index]['kamar_tersedia'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Text("Tersedia"),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(left: 16, right: 16),
+                                  child: Text(
+                                    "|",
+                                    style: TextStyle(color: Colors.black38),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      list[index]['kamar_terpakai'],
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Text("Terpakai"),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      height: 0,
+                    ),
+                    height: 100,
+                  );
+                },
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              );
+      },
+    );
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
 
@@ -126,6 +235,7 @@ class _MyHomeState extends State<MyHome> {
       //   ),
       // ),
       // body: futureBuilder,
+      // body: FutureBuilder2,
       body: Column(
         children: [
           Stack(
@@ -168,78 +278,22 @@ class _MyHomeState extends State<MyHome> {
                   ),
                 ),
                 width: double.infinity,
-                height: 200,
+                height: 180,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 50, top: 160),
-                child: Container(
-                  padding: EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        children: [
-                          Text(
-                            "58",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                          Text("Total kamar")
-                        ],
-                      ),
-                      Container(
-                        child: Text(
-                          "|",
-                          style: TextStyle(color: Colors.black38),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "18",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                          Text("Tersedia")
-                        ],
-                      ),
-                      Container(
-                        child: Text(
-                          "|",
-                          style: TextStyle(color: Colors.black38),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            "40",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                          Text("Terpakai")
-                        ],
-                      ),
-                    ],
-                  ),
-                  width: 300,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                ),
-              )
             ],
           ),
+              Expanded(child: FutureBuilder2),
           Padding(
-            padding: const EdgeInsets.only(left: 50, right: 50),
+            padding: const EdgeInsets.only(left: 50, right: 50, bottom: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(Daftar.routeName);
+                      },
                       child: Container(
                         child: Column(
                           children: [
@@ -262,7 +316,9 @@ class _MyHomeState extends State<MyHome> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(Sholat.routeName);
+                      },
                       child: Container(
                         child: Column(
                           children: [
@@ -289,7 +345,9 @@ class _MyHomeState extends State<MyHome> {
                 Column(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(Kamar.routeName);
+                      },
                       child: Container(
                         child: Column(
                           children: [
@@ -312,7 +370,9 @@ class _MyHomeState extends State<MyHome> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(Ambulan.routeName);
+                      },
                       child: Container(
                         child: Column(
                           children: [
@@ -339,7 +399,9 @@ class _MyHomeState extends State<MyHome> {
                 Column(
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(HasilLab.routeName);
+                      },
                       child: Container(
                         child: Column(
                           children: [
@@ -362,7 +424,9 @@ class _MyHomeState extends State<MyHome> {
                       ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed(Bantuan.routeName);
+                      },
                       child: Container(
                         child: Column(
                           children: [
@@ -402,9 +466,7 @@ class _MyHomeState extends State<MyHome> {
               ],
             ),
           ),
-
-          Expanded(child: futureBuilder),
-         
+          Expanded(child: futureBuilderNews),
           Container(
             padding: EdgeInsets.only(left: 30, right: 20),
             child: Row(
@@ -422,7 +484,6 @@ class _MyHomeState extends State<MyHome> {
               ],
             ),
           ),
-
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(

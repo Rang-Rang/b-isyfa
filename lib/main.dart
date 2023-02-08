@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:smart_medic/iconbtn/ambulan.dart';
+import 'package:smart_medic/iconbtn/bantuan.dart';
+import 'package:smart_medic/iconbtn/daftar.dart';
+import 'package:smart_medic/iconbtn/daftar_penyakit.dart';
+import 'package:smart_medic/iconbtn/hasil_lab.dart';
+import 'package:smart_medic/iconbtn/kamar.dart';
+import 'package:smart_medic/iconbtn/sholat.dart';
 import 'package:smart_medic/pages/auth_page.dart';
 import 'package:smart_medic/pages/pasien/old_pasien.dart';
 import '../pages/pasien/pasien.dart';
@@ -43,6 +50,15 @@ class _MyAppState extends State<MyApp> {
         Pasien.routeName: (context) => Pasien(),
         AuthPage.routeName:(context) => AuthPage(),
         Logins.routeName:(context) => Logins(),
+
+        Bantuan.routeName:(context) => Bantuan(),
+        Sholat.routeName:(context) => Sholat(),
+        HasilLab.routeName:(context) => HasilLab(),
+        Ambulan.routeName:(context) => Ambulan(),
+        Kamar.routeName:(context) => Kamar(),
+        Daftar.routeName:(context) => Daftar(),
+        DaftarPenyakit.routeName:(context) => DaftarPenyakit(),
+        
       },
     );
   }
