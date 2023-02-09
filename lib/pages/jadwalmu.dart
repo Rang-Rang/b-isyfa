@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class Jadwalmu extends StatefulWidget {
   const Jadwalmu({super.key});
@@ -14,101 +18,54 @@ class Jadwalmu extends StatefulWidget {
 class _JadwalmuState extends State<Jadwalmu> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CupertinoNavigationBar(
-        middle: Text("Jadwalmu"),
-        leading: Icon(Icons.offline_pin_outlined),
-      ),
-      body: ListView(
-        children: [
-          Container(
-            // height: 50,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: Column(
-                children: [
-                  ListTile(
+
+    Future getPenyakit() async {
+      final url = Uri.parse('http://192.168.1.12/rest_bisyifa/api/penyakit');
+      var response = await http.get(url);
+      return json.decode(response.body);
+    }
+    var futureBuilderPenyakit = FutureBuilder(
+      future: getPenyakit(),
+      builder: ((context, snapshot) {
+        if (snapshot.hasError) print(snapshot.error);
+        return snapshot.hasData
+            ? ListView.builder(
+                padding: const EdgeInsets.all(8),
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
+                  List list = snapshot.data;
+                  return ListTile(
                     title: Text(
-                      'Demam Berdarah',
+                      list[index]['nama_penyakit'],
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text('Penyakit DBD'),
+                    subtitle: Text(list[index]['keterangan']),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text("02:30"),
+                        Text(list[index]['tanggal']),
                         Text(
-                          "Selesai",
+                          list[index]['status'],
                           style: TextStyle(
                               color: Colors.green, fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
                     onTap: () {},
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Asma',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text('Penyakit Pernapasan'),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text("11:30"),
-                        Text(
-                          "Periksa",
-                          style: TextStyle(
-                              color: Colors.amber, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Cacar',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text('Penyakit Kulit'),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text("16:30"),
-                        Text(
-                          "Antrian",
-                          style: TextStyle(
-                              color: Colors.brown, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Demam',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text('Penyakit Badan'),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text("16:30"),
-                        Text(
-                          "Tunggu",
-                          style: TextStyle(
-                              color: Colors.red, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+                  );
+                })
+            : Center(
+                child: CircularProgressIndicator(),
+              );
+      }),
+    );
+
+    return Scaffold(
+      appBar: CupertinoNavigationBar(
+        middle: Text("Jadwalmu"),
+        leading: Icon(Icons.offline_pin_outlined),
       ),
+      body: futureBuilderPenyakit,
     );
   }
 }
