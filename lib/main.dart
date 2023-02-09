@@ -16,6 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
+  // koneksi firebase
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
@@ -34,6 +35,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
+    // splash duration
     Future.delayed(Duration(seconds: 2))
         .then((value) => {FlutterNativeSplash.remove()});
   }
@@ -44,6 +46,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       debugShowCheckedModeBanner: false,
       home: AuthPage(),
+      // routing (Perpindahan aplikasi)
       routes: {
         LoginPage.routeName: (context) => LoginPage(),
         MyHome.routeName: (context) => MyHome(),

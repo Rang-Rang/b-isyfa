@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+// class penghubung google service
 class AuthService {
   signInWithGoogle() async{
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();

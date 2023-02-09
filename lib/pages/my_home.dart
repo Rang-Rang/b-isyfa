@@ -18,6 +18,7 @@ import 'package:smart_medic/pages/pengaturan.dart';
 import 'package:smart_medic/pages/profile.dart';
 
 class MyHome extends StatefulWidget {
+  // nama route
   static const routeName = '/home';
 
   @override
@@ -25,21 +26,31 @@ class MyHome extends StatefulWidget {
 }
 
 class _MyHomeState extends State<MyHome> {
+
+  // fungsi logout
   void signUserOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
 
+
+  // index awal dari tabs bottom bar
   int _currentIndex = 0;
 
-  final user = FirebaseAuth.instance.currentUser;
 
+  // user login profile
+  final user = FirebaseAuth.instance.currentUser;
+  
+  
+  // fungsi penghubung api kamar
   Future getNews() async {
     final url = Uri.parse('http://192.168.1.12/rest_bisyifa/api/news');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
+
+  // fungsi penghubung api kamar
   Future getKamar() async {
     final url = Uri.parse('http://192.168.1.12/rest_bisyifa/api/kamar/');
     var response = await http.get(url);
@@ -48,6 +59,8 @@ class _MyHomeState extends State<MyHome> {
 
   @override
   Widget build(BuildContext context) {
+
+    // penghubung api dengan news
     var futureBuilderNews = FutureBuilder(
       future: getNews(),
       builder: ((context, snapshot) {
@@ -133,6 +146,8 @@ class _MyHomeState extends State<MyHome> {
               );
       }),
     );
+
+    // penghubung api dan tampilan kamar
     var FutureBuilder2 = FutureBuilder(
       future: getKamar(),
       builder: (context, snapshot) {
@@ -224,6 +239,7 @@ class _MyHomeState extends State<MyHome> {
       },
     );
 
+    // seluruh tampilan home 
     var home = Column(
       children: [
         Stack(
@@ -618,6 +634,7 @@ class _MyHomeState extends State<MyHome> {
       ],
     );
 
+    // tabs yang ada dari bottom navigation bar
     final tabs = [
       home,
       Jadwalmu(),
@@ -629,17 +646,11 @@ class _MyHomeState extends State<MyHome> {
       resizeToAvoidBottomInset: false,
 
       appBar: null,
-      // drawer: Drawer(
-      //   child: Column(
-      //     children: [
 
-      //     ],
-      //   ),
-      // ),
-      // body: futureBuilder,
-      // body: FutureBuilder2,
+      // body dari seluruh aplikasi
       body: tabs[_currentIndex],
 
+      // bottom navigation bar untuk bar bagian bawah
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,

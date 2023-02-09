@@ -9,6 +9,7 @@ import 'package:smart_medic/pages/pasien/old_pasien.dart';
 import 'package:smart_medic/services/auth_service.dart';
 
 class Pasien extends StatefulWidget {
+   // nama route
   static const routeName = '/login';
 
   @override
@@ -16,11 +17,13 @@ class Pasien extends StatefulWidget {
 }
 
 class _PasienState extends State<Pasien> {
+  // controller text field
   TextEditingController dateController = TextEditingController();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  // login menggunakan email
   void signUserIn() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: emailController.text,
@@ -36,6 +39,7 @@ class _PasienState extends State<Pasien> {
     super.initState();
   }
 
+  // default drowndown 
   String dropdownvalue = 'Cash';
 
   // List of items in our dropdown menu

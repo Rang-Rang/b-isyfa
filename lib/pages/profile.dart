@@ -16,11 +16,13 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final user = FirebaseAuth.instance.currentUser;
 
+  // fungsi logout
   void signUserOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
 
+  // fungsi mendapatkan foto di profile dari google/email
   getProfileImage() {
     if (user?.photoURL != null) {
       String? userImage = user?.photoURL;
@@ -32,6 +34,7 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  // fungsi mendapatkan nama dari google/email
   getProfileName() {
     if (user?.displayName != null) {
       return Text(

@@ -11,10 +11,14 @@ class Logins extends StatefulWidget {
 }
 
 class _LoginsState extends State<Logins> {
+  
+  // controller password
   final emailController = TextEditingController();
 
+  // controller password
   final passwordController = TextEditingController();
 
+  // login firebase
   void signUserIn() async {
 
       await FirebaseAuth.instance.signInWithEmailAndPassword(
