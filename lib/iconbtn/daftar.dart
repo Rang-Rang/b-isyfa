@@ -18,7 +18,17 @@ class _DaftarState extends State<Daftar> {
       final url = Uri.parse('http://192.168.1.12/rest_bisyifa/api/penyakit');
       var response = await http.get(url);
       return json.decode(response.body);
-    }
+    };
+    
+    Future hapusPenyakit(String id) async{
+      final response = await http.post(Uri.parse('http://192.168.1.12/rest_bisyifa/api/penyakit'),
+      body: {
+        "nama_penyakit": id,
+      });
+      
+      return json.decode(response.body);
+    };
+
     var futureBuilderPenyakit = FutureBuilder(
       future: getPenyakit(),
       builder: ((context, snapshot) {
@@ -34,6 +44,24 @@ class _DaftarState extends State<Daftar> {
                       list[index]['nama_penyakit'],
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
+                    onLongPress: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            content: Text("apakah anda yakin mau menghapus data?"),
+                            actions: [
+                              ElevatedButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, child: Text("Batal")),
+                              ElevatedButton(onPressed: () {
+                                hapusPenyakit(list[index]["nama_penyakit"]);
+                              }, child: Text("Hapus")),
+                            ],
+                          );
+                        },
+                      );
+                    },
                     subtitle: Text(list[index]['keterangan']),
                     trailing: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
