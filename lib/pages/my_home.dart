@@ -16,6 +16,7 @@ import 'dart:convert';
 
 import 'package:smart_medic/pages/pengaturan.dart';
 import 'package:smart_medic/pages/profile.dart';
+import 'package:smart_medic/services/base_url.dart';
 
 class MyHome extends StatefulWidget {
   // nama route
@@ -27,32 +28,67 @@ class MyHome extends StatefulWidget {
 
 class _MyHomeState extends State<MyHome> {
 
-  // fungsi logout
+   /*
+      nama fungsi : signUserOut
+      deskripsi : untuk logout dari aplikasi
+      parameter : -
+      return : dua fungsi signout dari firebase dan google
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
   void signUserOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
 
 
-  // index awal dari tabs bottom bar
+   /*
+      nama fungsi : _currentIndex
+      deskripsi : default value dari tabs
+      parameter : -
+      return : integer angka 0
+      dibuat oleh : Rangga
+      tanggal dibuat : 4/2/2023
+    */
   int _currentIndex = 0;
 
 
-  // user login profile
+   /*
+      nama attribut : user
+      deskripsi : untuk mengambil data user dari api
+      parameter : -
+      return : array user dari firebase
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
   final user = FirebaseAuth.instance.currentUser;
   
   
-  // fungsi penghubung api kamar
+   /*
+      nama fungsi : getNews
+      deskripsi : untuk mengambil data news dari api
+      parameter : -
+      return : response.body
+      dibuat oleh : Rangga
+      tanggal dibuat : 4/2/2023
+    */
   Future getNews() async {
-    final url = Uri.parse('http://192.168.1.12/rest_bisyifa/api/news');
+    final url = Uri.parse(baseUrl.link+'news');
     var response = await http.get(url);
     return json.decode(response.body);
   }
 
 
-  // fungsi penghubung api kamar
+   /*
+      nama fungsi : getkamar
+      deskripsi : untuk mengambil data kamar dari api
+      parameter : -
+      return : response.body
+      dibuat oleh : Rangga
+      tanggal dibuat : 6/2/2023
+    */
   Future getKamar() async {
-    final url = Uri.parse('http://192.168.1.12/rest_bisyifa/api/kamar/');
+    final url = Uri.parse(baseUrl.link+'kamar');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -661,7 +697,7 @@ class _MyHomeState extends State<MyHome> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.offline_pin_outlined),
-            label: "Jadwalmu",
+            label: "History",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications_none_outlined),

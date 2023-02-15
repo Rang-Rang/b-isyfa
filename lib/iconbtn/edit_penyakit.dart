@@ -7,14 +7,17 @@ import 'dart:convert';
 
 import 'package:smart_medic/services/base_url.dart';
 
-class DaftarPenyakit extends StatefulWidget {
-  static const routeName = '/daftarpenyakit';
+
+class EditPenyakit extends StatefulWidget {
+  late final Map listData;
+  static const routeName = '/EditPenyakit';
+  EditPenyakit({Key? key, required this.listData}) : super(key: key);
 
   @override
-  State<DaftarPenyakit> createState() => _DaftarPenyakitState();
+  State<EditPenyakit> createState() => _EditPenyakitState();
 }
 
-class _DaftarPenyakitState extends State<DaftarPenyakit> {
+class _EditPenyakitState extends State<EditPenyakit> {
   final formKey = GlobalKey<FormState>();
   TextEditingController penyakitController = TextEditingController();
   TextEditingController keteranganController = TextEditingController();
@@ -30,19 +33,21 @@ class _DaftarPenyakitState extends State<DaftarPenyakit> {
       tanggal dibuat : 9/2/2023
     */
   Future _simpan() async {
-    final response =
-        await http.post(Uri.parse('http://192.168.1.8/api/penyakitFlutter/create.php'), body: {
-      "nama_penyakit": penyakitController.text,
-      "keterangan": keteranganController.text,
-      "status": statusController.text,
-      "waktu": waktuController.text,
-    });
+    final response = await http.post(
+        Uri.parse('http://192.168.1.8/api/penyakitFlutter/edit.php'),
+        body: {
+          "nama_penyakit": penyakitController.text,
+          "keterangan": keteranganController.text,
+          "status": statusController.text,
+          "waktu": waktuController.text,
+        });
     if (response.statusCode == 200) {
       return true;
     }
     return false;
   }
 
+  
   /*
       nama fungsi : getPenyakit
       deskripsi : untuk mengambil data dari api
@@ -51,11 +56,11 @@ class _DaftarPenyakitState extends State<DaftarPenyakit> {
       dibuat oleh : Rangga
       tanggal dibuat : 8/2/2023
     */
-  // Future getPenyakit() async {
-  //   final url = Uri.parse(baseUrl.link + 'penyakit');
-  //   var response = await http.get(url);
-  //   return json.decode(response.body);
-  // }
+  Future getPenyakit() async {
+    final url = Uri.parse(baseUrl.link+'penyakit');
+    var response = await http.get(url);
+    return json.decode(response.body);
+  }
 
   @override
   void initState() {
@@ -67,13 +72,14 @@ class _DaftarPenyakitState extends State<DaftarPenyakit> {
     return Scaffold(
         appBar: AppBar(
           title: Text("Daftar Penyakit"),
+          
         ),
         body: Column(
           children: [
             Container(
               padding: EdgeInsets.only(top: 15),
               child: Text(
-                "Tambah Penyakit",
+                "Edit Penyakit",
                 style: TextStyle(color: Colors.black38),
               ),
             ),
@@ -145,41 +151,41 @@ class _DaftarPenyakitState extends State<DaftarPenyakit> {
                         },
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // _futurePenyakit = createPenyakit(penyakitController.text,keteranganController.text,statusController.text,waktuController.text);
-                          if (formKey.currentState!.validate()) {
-                            _simpan().then((value) {
-                              if (value) {
-                                final snackBar = SnackBar(
-                                  content: Text("Data berhasil di simpan"),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              } else {
-                                final snackBar = SnackBar(
-                                  content: Text("Data gagal di simpan"),
-                                );
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              }
-                            });
-                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) => Daftar())), (route) => false);
-                          }
-                        },
-                        child: Text(
-                          "Ajukan",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.only(left: 140, right: 140),
-                          backgroundColor: Colors.deepPurple,
-                          shape: StadiumBorder(),
-                        ),
-                      ),
-                    ),
+
+                    
+            Container(
+              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: ElevatedButton(
+                onPressed: () {
+                  // _futurePenyakit = createPenyakit(penyakitController.text,keteranganController.text,statusController.text,waktuController.text);
+                  if (formKey.currentState!.validate()) {
+                    _simpan().then((value) {
+                      if (value) {
+                        final snackBar = SnackBar(
+                          content: Text("Data berhasil di simpan"),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        final snackBar = SnackBar(
+                          content: Text("Data gagal di simpan"),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      };
+                    });
+                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: ((context) => Daftar())), (route) => false);
+                  }
+                },
+                child: Text(
+                  "Ajukan",
+                  style: TextStyle(color: Colors.white),
+                ),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.only(left: 140, right: 140),
+                  backgroundColor: Colors.deepPurple,
+                  shape: StadiumBorder(),
+                ),
+              ),
+            ),
                   ],
                 ),
               ),

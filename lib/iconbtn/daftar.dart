@@ -4,6 +4,10 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:smart_medic/iconbtn/edit_penyakit.dart';
+import 'package:smart_medic/pages/my_home.dart';
+import 'package:smart_medic/services/base_url.dart';
+
 class Daftar extends StatefulWidget {
   static const routeName = '/Daftar';
 
@@ -14,20 +18,44 @@ class Daftar extends StatefulWidget {
 class _DaftarState extends State<Daftar> {
   @override
   Widget build(BuildContext context) {
+    /*
+      nama fungsi : getPenyakit
+      deskripsi : untuk mengambil data dari api
+      parameter : -
+      return : response.body
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
     Future getPenyakit() async {
-      final url = Uri.parse('http://192.168.1.12/rest_bisyifa/api/penyakit');
+      final url = Uri.parse(baseUrl.link + 'penyakit');
       var response = await http.get(url);
       return json.decode(response.body);
-    };
-    
-    Future hapusPenyakit(String id) async{
-      final response = await http.post(Uri.parse('http://192.168.1.12/rest_bisyifa/api/penyakit'),
-      body: {
-        "nama_penyakit": id,
-      });
-      
-      return json.decode(response.body);
-    };
+    }
+
+    ;
+
+    /*
+      nama fungsi : hapusPenyakit
+      deskripsi : untuk menghapus data dari api
+      parameter : $id = nilai integer, untuk mengfilter data penyakit berdasarkan id
+      return : hapus data penyakit
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
+    Future hapusPenyakit(String id) async {
+      try {
+        final url = Uri.parse('http://192.168.1.8/api/penyakitFlutter/delete.php');
+        var response = await http.post(url, body: {
+          'nama_penyakit': id,
+        });
+        if (response.statusCode == 200) {
+          return true;
+        }
+        return false;
+      } catch (e) {
+        print(e);
+      }
+    }
 
     var futureBuilderPenyakit = FutureBuilder(
       future: getPenyakit(),
@@ -40,42 +68,86 @@ class _DaftarState extends State<Daftar> {
                 itemBuilder: (context, index) {
                   List list = snapshot.data;
                   return ListTile(
-                    title: Text(
-                      list[index]['nama_penyakit'],
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    onLongPress: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content: Text("apakah anda yakin mau menghapus data?"),
-                            actions: [
-                              ElevatedButton(onPressed: () {
-                                Navigator.of(context).pop();
-                              }, child: Text("Batal")),
-                              ElevatedButton(onPressed: () {
-                                hapusPenyakit(list[index]["nama_penyakit"]);
-                              }, child: Text("Hapus")),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    subtitle: Text(list[index]['keterangan']),
-                    trailing: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(list[index]['tanggal']),
-                        Text(
-                          list[index]['status'],
-                          style: TextStyle(
-                              color: Colors.green, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    onTap: () {},
-                  );
+                      title: Text(
+                        list[index]['nama_penyakit'].toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text(list[index]['keterangan'].toString()),
+                      trailing: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(list[index]['waktu'].toString()),
+                          Text(
+                            list[index]['status'].toString(),
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      onLongPress: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              content:
+                                  Text("Yakin menghapus riwayat penyakit?"),
+                              actions: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    hapusPenyakit(list[index]['nama_penyakit'].toString())
+                                        .then((value) {
+                                      if (value) {
+                                        final snackBar = SnackBar(
+                                          content:
+                                              Text("Data berhasil di simpan"),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      } else {
+                                        final snackBar = SnackBar(
+                                          content: Text("Data gagal di simpan"),
+                                        );
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
+                                      }
+                                    });
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: ((context) => Daftar())),
+                                        (route) => false);
+                                  },
+                                  child: Text("Hapus"),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditPenyakit(listData: {
+                                              "nama_penyakit": list[index]
+                                                  ['nama_penyakit'],
+                                              "keterangan": list[index]
+                                                  ['keterangan'],
+                                              "status": list[index]['status'],
+                                              "waktu": list[index]['waktu'],
+                                            }),
+                                          ));
+                                    },
+                                    child: Text("Update")),
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text("Batal"),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      });
                 })
             : Center(
                 child: CircularProgressIndicator(),
@@ -86,116 +158,22 @@ class _DaftarState extends State<Daftar> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Daftar"),
+        leading: IconButton(onPressed: () {
+            Navigator.of(context).pushNamed(MyHome.routeName);
+          }, icon: Icon(Icons.arrow_back)), 
       ),
       body: Column(
         children: [
           Container(
             padding: EdgeInsets.only(top: 15),
             child: Text(
-              "Riwayat Penyakit",
+              "Rekap medis",
               style: TextStyle(color: Colors.black38),
             ),
           ),
           Divider(
             color: Colors.grey,
           ),
-          // Expanded(
-          //   child: ListView(
-          //     padding: const EdgeInsets.all(8),
-          //     children: <Widget>[
-          //       Container(
-          //         // height: 50,
-          //         child: Padding(
-          //           padding: const EdgeInsets.only(left: 5),
-          //           child: Column(
-          //             children: [
-          //               ListTile(
-          //                 title: Text(
-          //                   'Demam Berdarah',
-          //                   style: TextStyle(fontWeight: FontWeight.bold),
-          //                 ),
-          //                 subtitle: Text('Penyakit DBD'),
-          //                 trailing: Column(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //                   children: [
-          //                     Text("02:30"),
-          //                     Text(
-          //                       "Selesai",
-          //                       style: TextStyle(
-          //                           color: Colors.green,
-          //                           fontWeight: FontWeight.bold),
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 onTap: () {},
-          //               ),
-          //               ListTile(
-          //                 title: Text(
-          //                   'Asma',
-          //                   style: TextStyle(fontWeight: FontWeight.bold),
-          //                 ),
-          //                 subtitle: Text('Penyakit Pernapasan'),
-          //                 trailing: Column(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //                   children: [
-          //                     Text("11:30"),
-          //                     Text(
-          //                       "Periksa",
-          //                       style: TextStyle(
-          //                           color: Colors.amber,
-          //                           fontWeight: FontWeight.bold),
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 onTap: () {},
-          //               ),
-          //               ListTile(
-          //                 title: Text(
-          //                   'Cacar',
-          //                   style: TextStyle(fontWeight: FontWeight.bold),
-          //                 ),
-          //                 subtitle: Text('Penyakit Kulit'),
-          //                 trailing: Column(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //                   children: [
-          //                     Text("16:30"),
-          //                     Text(
-          //                       "Antrian",
-          //                       style: TextStyle(
-          //                           color: Colors.brown,
-          //                           fontWeight: FontWeight.bold),
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 onTap: () {},
-          //               ),
-          //               ListTile(
-          //                 title: Text(
-          //                   'Demam',
-          //                   style: TextStyle(fontWeight: FontWeight.bold),
-          //                 ),
-          //                 subtitle: Text('Penyakit Badan'),
-          //                 trailing: Column(
-          //                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //                   children: [
-          //                     Text("16:30"),
-          //                     Text(
-          //                       "Tunggu",
-          //                       style: TextStyle(
-          //                           color: Colors.red,
-          //                           fontWeight: FontWeight.bold),
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 onTap: () {},
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           Expanded(child: futureBuilderPenyakit)
         ],
       ),

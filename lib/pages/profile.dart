@@ -14,15 +14,37 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  /*
+      nama attribut : user
+      deskripsi : untuk mengambil data user dari api
+      parameter : -
+      return : array user dari firebase
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
   final user = FirebaseAuth.instance.currentUser;
 
-  // fungsi logout
+  /*
+      nama fungsi : signUserOut
+      deskripsi : untuk logout dari aplikasi
+      parameter : -
+      return : dua fungsi signout dari firebase dan google
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
   void signUserOut() async {
     await FirebaseAuth.instance.signOut();
     await GoogleSignIn().signOut();
   }
 
-  // fungsi mendapatkan foto di profile dari google/email
+   /*
+      nama fungsi : getProfileImage
+      deskripsi : untuk mengambil data dari user
+      parameter : -
+      return : link image dari user
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
   getProfileImage() {
     if (user?.photoURL != null) {
       String? userImage = user?.photoURL;
@@ -34,7 +56,14 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  // fungsi mendapatkan nama dari google/email
+   /*
+      nama fungsi : getProfileName
+      deskripsi : untuk mengambil data dari user
+      parameter : -
+      return : text yang berisikan nama/pasien 
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
   getProfileName() {
     if (user?.displayName != null) {
       return Text(

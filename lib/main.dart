@@ -4,6 +4,7 @@ import 'package:smart_medic/iconbtn/ambulan.dart';
 import 'package:smart_medic/iconbtn/bantuan.dart';
 import 'package:smart_medic/iconbtn/daftar.dart';
 import 'package:smart_medic/iconbtn/daftar_penyakit.dart';
+import 'package:smart_medic/iconbtn/edit_penyakit.dart';
 import 'package:smart_medic/iconbtn/hasil_lab.dart';
 import 'package:smart_medic/iconbtn/kamar.dart';
 import 'package:smart_medic/iconbtn/sholat.dart';
@@ -16,7 +17,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
-  // koneksi firebase
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
@@ -46,7 +46,14 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(primarySwatch: Colors.deepPurple),
       debugShowCheckedModeBanner: false,
       home: AuthPage(),
-      // routing (Perpindahan aplikasi)
+      /*
+      nama attribut : routes
+      deskripsi : untuk mengambil seluruh file dijadikan satu dan mempermudah perpindahan aplikasi
+      parameter : -
+      return : class dari setiap page
+      dibuat oleh : Rangga
+      tanggal dibuat : 2/2/2023
+    */
       routes: {
         LoginPage.routeName: (context) => LoginPage(),
         MyHome.routeName: (context) => MyHome(),
@@ -61,6 +68,7 @@ class _MyAppState extends State<MyApp> {
         Kamar.routeName:(context) => Kamar(),
         Daftar.routeName:(context) => Daftar(),
         DaftarPenyakit.routeName:(context) => DaftarPenyakit(),
+        EditPenyakit.routeName:(context) => EditPenyakit(listData: {},),
         
       },
     );

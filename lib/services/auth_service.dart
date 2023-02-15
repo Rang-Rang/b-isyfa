@@ -3,6 +3,14 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 // class penghubung google service
 class AuthService {
+  /*
+      nama fungsi : signInWithGoogle
+      deskripsi : untuk mengambil data user dari firebase google
+      parameter : -
+      return : credential user dari google
+      dibuat oleh : Rangga
+      tanggal dibuat : 8/2/2023
+    */
   signInWithGoogle() async{
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
