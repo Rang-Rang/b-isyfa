@@ -31,7 +31,7 @@ class _DaftarPenyakitState extends State<DaftarPenyakit> {
     */
   Future _simpan() async {
     final response =
-        await http.post(Uri.parse('http://192.168.1.8/api/penyakitFlutter/create.php'), body: {
+        await http.post(Uri.parse(baseUrl.links+'create.php'), body: {
       "nama_penyakit": penyakitController.text,
       "keterangan": keteranganController.text,
       "status": statusController.text,
