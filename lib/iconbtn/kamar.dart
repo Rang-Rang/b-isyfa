@@ -9,7 +9,7 @@ class Kamar extends StatelessWidget {
   static const routeName = '/Kamar';
 
   Future getKamar() async {
-    final url = Uri.parse(baseUrl.link+'kamar/');
+    final url = Uri.parse(baseUrl.linkApi+'kamar');
     var response = await http.get(url);
     return json.decode(response.body);
   }

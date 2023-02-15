@@ -30,7 +30,7 @@ class _JadwalmuState extends State<Jadwalmu> {
       tanggal dibuat : 8/2/2023
     */
     Future getPenyakit() async {
-      final url = Uri.parse(baseUrl.link+'penyakit');
+      final url = Uri.parse(baseUrl.linkApi+'penyakit');
       var response = await http.get(url);
       return json.decode(response.body);
     }

@@ -1,3 +1,4 @@
 class baseUrl {
-  static const link = "http://192.168.1.8/rest_bisyifa/api/";
+  static const linkApi = "http://192.168.1.6/rest_bisyifa/api/"; // for all api
+  static const links = "http://192.168.1.6/api/penyakitFlutter/"; // for create, edit, delete penyakit
 }

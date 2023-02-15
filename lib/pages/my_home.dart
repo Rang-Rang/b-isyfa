@@ -73,7 +73,7 @@ class _MyHomeState extends State<MyHome> {
       tanggal dibuat : 4/2/2023
     */
   Future getNews() async {
-    final url = Uri.parse(baseUrl.link+'news');
+    final url = Uri.parse(baseUrl.linkApi+'news');
     var response = await http.get(url);
     return json.decode(response.body);
   }
@@ -88,7 +88,7 @@ class _MyHomeState extends State<MyHome> {
       tanggal dibuat : 6/2/2023
     */
   Future getKamar() async {
-    final url = Uri.parse(baseUrl.link+'kamar');
+    final url = Uri.parse(baseUrl.linkApi+'kamar');
     var response = await http.get(url);
     return json.decode(response.body);
   }

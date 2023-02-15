@@ -27,7 +27,7 @@ class _DaftarState extends State<Daftar> {
       tanggal dibuat : 8/2/2023
     */
     Future getPenyakit() async {
-      final url = Uri.parse(baseUrl.link + 'penyakit');
+      final url = Uri.parse(baseUrl.linkApi + 'penyakit');
       var response = await http.get(url);
       return json.decode(response.body);
     }
@@ -44,7 +44,8 @@ class _DaftarState extends State<Daftar> {
     */
     Future hapusPenyakit(String id) async {
       try {
-        final url = Uri.parse('http://192.168.1.8/api/penyakitFlutter/delete.php');
+        final url =
+            Uri.parse(baseUrl.links+'delete.php');
         var response = await http.post(url, body: {
           'nama_penyakit': id,
         });
@@ -95,7 +96,8 @@ class _DaftarState extends State<Daftar> {
                               actions: [
                                 ElevatedButton(
                                   onPressed: () {
-                                    hapusPenyakit(list[index]['nama_penyakit'].toString())
+                                    hapusPenyakit(list[index]['nama_penyakit']
+                                            .toString())
                                         .then((value) {
                                       if (value) {
                                         final snackBar = SnackBar(
@@ -122,19 +124,25 @@ class _DaftarState extends State<Daftar> {
                                 ),
                                 ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditPenyakit(listData: {
-                                              "nama_penyakit": list[index]
-                                                  ['nama_penyakit'],
-                                              "keterangan": list[index]
-                                                  ['keterangan'],
+                                      // Navigator.push(
+                                      //     context,
+                                      //     MaterialPageRoute(
+                                      //       builder: (context) =>
+                                      //           EditPenyakit(listData: {
+                                      //         "nama_penyakit": list[index]['nama_penyakit'],
+                                      //         "keterangan": list[index]['keterangan'],
+                                      //         "status": list[index]['status'],
+                                      //         "waktu": list[index]['waktu'],
+                                      //       }),
+                                      //     ));
+                                      Navigator.push(context, 
+                                      MaterialPageRoute(builder: (context) => EditPenyakit(listData: {
+                                        "id_penyakit": list[index]['id_penyakit'],
+                                        "nama_penyakit": list[index]['nama_penyakit'],
+                                              "keterangan": list[index]['keterangan'],
                                               "status": list[index]['status'],
                                               "waktu": list[index]['waktu'],
-                                            }),
-                                          ));
+                                      })));
                                     },
                                     child: Text("Update")),
                                 ElevatedButton(
@@ -158,9 +166,11 @@ class _DaftarState extends State<Daftar> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Daftar"),
-        leading: IconButton(onPressed: () {
-            Navigator.of(context).pushNamed(MyHome.routeName);
-          }, icon: Icon(Icons.arrow_back)), 
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(MyHome.routeName);
+            },
+            icon: Icon(Icons.arrow_back)),
       ),
       body: Column(
         children: [

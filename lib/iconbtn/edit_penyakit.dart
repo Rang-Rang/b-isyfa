@@ -19,6 +19,7 @@ class EditPenyakit extends StatefulWidget {
 
 class _EditPenyakitState extends State<EditPenyakit> {
   final formKey = GlobalKey<FormState>();
+  TextEditingController idController = TextEditingController();
   TextEditingController penyakitController = TextEditingController();
   TextEditingController keteranganController = TextEditingController();
   TextEditingController statusController = TextEditingController();
@@ -32,10 +33,11 @@ class _EditPenyakitState extends State<EditPenyakit> {
       dibuat oleh : Rangga
       tanggal dibuat : 9/2/2023
     */
-  Future _simpan() async {
+  Future _update() async {
     final response = await http.post(
-        Uri.parse('http://192.168.1.8/api/penyakitFlutter/edit.php'),
+        Uri.parse(baseUrl.links+'edit.php'),
         body: {
+          "id_penyakit": idController.text,
           "nama_penyakit": penyakitController.text,
           "keterangan": keteranganController.text,
           "status": statusController.text,
@@ -56,11 +58,11 @@ class _EditPenyakitState extends State<EditPenyakit> {
       dibuat oleh : Rangga
       tanggal dibuat : 8/2/2023
     */
-  Future getPenyakit() async {
-    final url = Uri.parse(baseUrl.link+'penyakit');
-    var response = await http.get(url);
-    return json.decode(response.body);
-  }
+  // Future getPenyakit() async {
+  //   final url = Uri.parse(baseUrl.link+'penyakit');
+  //   var response = await http.get(url);
+  //   return json.decode(response.body);
+  // }
 
   @override
   void initState() {
@@ -69,6 +71,11 @@ class _EditPenyakitState extends State<EditPenyakit> {
 
   @override
   Widget build(BuildContext context) {
+    idController.text = widget.listData['id_penyakit'].toString();
+    penyakitController.text=widget.listData['nama_penyakit'];
+    keteranganController.text=widget.listData['keterangan'];
+    statusController.text=widget.listData['status'];
+    waktuController.text=widget.listData['waktu'];
     return Scaffold(
         appBar: AppBar(
           title: Text("Daftar Penyakit"),
@@ -159,7 +166,7 @@ class _EditPenyakitState extends State<EditPenyakit> {
                 onPressed: () {
                   // _futurePenyakit = createPenyakit(penyakitController.text,keteranganController.text,statusController.text,waktuController.text);
                   if (formKey.currentState!.validate()) {
-                    _simpan().then((value) {
+                    _update().then((value) {
                       if (value) {
                         final snackBar = SnackBar(
                           content: Text("Data berhasil di simpan"),
